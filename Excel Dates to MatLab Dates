@@ -1,0 +1,7 @@
+[data text combined] = xlsread('RNGWHHDm.xls','Data 1');
+
+ExDates = [data(:, 1)];
+
+MATLABDate = x2mdate(ExDates, 1)
+
+datestr(MATLABDate)
