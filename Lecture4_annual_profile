@@ -1,0 +1,21 @@
+function [ m ] = annual_profile( data )
+%function that creates monthly gas prices to annual profile
+
+years = floor(length((data)/12));
+m = zeros(12,years);
+
+for i = 1:years
+    for j = 1:12
+        m(j,i) = data((i-1)*12+j);
+    end
+end
+
+% years = 1997:1:2016;
+% start = find(years==2008);
+
+%years = 1999:1:2016;
+%start = find(years==1999);
+
+%n = m(:,start:end);
+
+end
