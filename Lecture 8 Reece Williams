@@ -1,0 +1,81 @@
+%Lecture8
+
+%import relevant data 
+[data text combined] = xlsread('N3045US3m','Data 1','A4:B183');
+
+data = data(:, 2);
+%histogram of 2002-2016 gas price data
+histogram(data); 
+
+%log transformation
+transformed_data = log(data);
+
+%histogram of log transformed data
+histogram(transformed_data); 
+xlabel('Log Natural Gas Price ($/MMBtu)','FontSize',14);
+ylabel('Frequency','FontSize',14);
+
+%number of years in dataset
+years = length(data)/12;
+
+%convert to 12 x N matrix
+monthly_matrix = vec2mat(transformed_data,12,years);
+
+% mean and standard deviation of log-transformed data by month
+stats = zeros(12,2);
+for i = 1:12
+    stats(i,1) = mean(monthly_matrix(i,:));
+    stats(i,2) = std(monthly_matrix(i,:));
+end
+
+%identify months
+months = {'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'};
+
+figure; 
+hold on;
+%bin 'edges'
+edges = 0:0.5:30;
+
+%highest mean
+idx = find(stats(:,1) == max(stats(:,1)));
+sample = stats(idx,1) + stats(idx,2)*randn(1000,1);
+back_transformed = exp(sample);
+histogram(back_transformed,edges);
+label_1 = strcat(months{idx},' - Highest Mean');
+
+%lowest mean 
+idx = find(stats(:,1) == min(stats(:,1)));
+sample_2 = stats(idx,1) + stats(idx,2)*randn(1000,1);
+back_transformed = exp(sample_2);
+histogram(back_transformed,edges);
+label_2 = strcat(months{idx},' - Lowest Mean');
+
+%highest stardard deviation 
+idx = find(stats(:,2) == max(stats(:,2)));
+sample_3 = stats(idx,1) + stats(idx,2)*randn(1000,1);
+back_transformed = exp(sample_3);
+histogram(back_transformed,edges);
+label_3 = strcat(months{idx},' - Highest STDV');
+
+%lowest standard deviation
+idx = find(stats(:,1) == min(stats(:,1)));
+sample_4 = stats(idx,1) + stats(idx,2)*randn(1000,1);
+back_transformed = exp(sample_4);
+histogram(back_transformed,edges);
+label_4 = strcat(months{idx},' - Lowest STDV');
+
+xlabel('Natural Gas Price $/MMBtu');
+ylabel('Frequency $/MMBtu');
+
+legend(label_1, label_2, label_3, label_4);
+hold off;
+
+%8
+figure;
+boxplot(monthly_matrix', 'Labels',{'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'});
+xlabel('Month', 'FontSize', 14);
+ylabel('Log Natural Gas Prices $/MMBtu', 'FontSize', 14);
+
+%10
+figure; 
+plot(data);
