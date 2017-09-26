@@ -1,0 +1,101 @@
+%Lecture10
+
+data=xlsread('catawba_data.xlsx');
+
+temps = data(:,4);
+flows = data(:,5);
+
+days=length(temps);
+
+W = zeros(days,1); 
+losses = zeros(days,1);
+
+for i = 1:days
+    
+    W(i) = (33.3/(1+exp(.15*(16.9-temps(i)))) + 127/flows(i));
+    
+    if W(i) > 37 && W(i) <= 40
+    losses(i) = .25*2000*24;
+    elseif W(i) > 40 && W(i) <= 42
+    losses(i) = .50*2000*24;
+    elseif W(i) > 42
+    losses(i) = 2000*24;
+    end
+        
+end
+
+losses_dollars = (losses*100)/1000; %covert losses to thousands of dollars
+
+annual_losses = zeros(41,1);
+
+for i = 1:41
+    annual_losses(i) = sum(losses_dollars((i-1)*365+1:(i-1)*365+365));
+end
+
+sorted_losses = sort(annual_losses);
+idx = round(.95*41);
+
+Var = sorted_losses(idx);
+
+
+%Climate Change
+
+newtemp = temps +2;
+
+log_flows = log(flows);
+mean_logflow = mean(log_flows);
+stdv_logflow = std(log_flows);
+
+white_flow = (log_flows - mean_logflow)/stdv_logflow;
+
+%add cc
+
+cc_mu = 0.9*(mean_logflow);
+cc_flow = 1.2*(stdv_logflow);
+
+S = exp(cc_mu+(cc_flow*white_flow));
+
+
+c_W = zeros(days,1); 
+c_losses = zeros(days,1);
+
+
+
+for i = 1:days
+    
+    c_W(i) = (33.3/(1+exp(.15*(16.9-newtemp(i)))) + 127/S(i));
+    
+    if c_W(i) > 37 && c_W(i) <= 40
+    c_losses(i) = .25*2000*24;
+    elseif c_W(i) > 40 && c_W(i) <= 42
+    c_losses(i) = .50*2000*24;
+    elseif c_W(i) > 42
+    c_losses(i) = 2000*24;
+    end
+        
+end
+
+climate_losses_dollars = (c_losses*100)/1000; %covert losses to thousands of dollars
+
+c_annual_losses = zeros(41,1);
+
+for i = 1:41
+    c_annual_losses(i) = sum(climate_losses_dollars((i-1)*365+1:(i-1)*365+365));
+end
+
+climate_sorted_losses = sort(c_annual_losses);
+c_idx = round(.95*41);
+
+climate_Var = climate_sorted_losses(c_idx)
+
+%Bins for the histograms 
+bin = ceil(max(c_annual_losses)/100000)*100000;
+edges = [0:10000:bin];
+
+figure; 
+hold on; 
+histogram(annual_losses,edges);
+histogram(c_annual_losses,edges);
+ylabel('Frequency','FontSize',14);
+xlabel('Losses $1000s','FontSize',14);
+legend('1970-2010','Climate Change');
