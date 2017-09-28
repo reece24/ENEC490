@@ -1,0 +1,45 @@
+%Lecture11
+
+% data=xlsread('temp_demand.xlsx');
+t_data = xlsread('temp_demand.xlsx','training');
+v_data = xlsread('temp_demand.xlsx','validation');
+t_temps = t_data(:,1);
+t_demand = t_data(:,3);
+v_temps = v_data(:,1);
+v_demand = v_data(:,3);
+
+t_CDD = max(t_temps - 65,0);
+t_HDD = max(65 - t_temps,0);
+v_CDD = max(v_temps - 65,0);
+v_HDD = max(65 - v_temps,0);
+
+X = [ones(length(t_CDD),1) t_CDD t_HDD];
+%need to give ourselves an intercept, so create a vector of ones
+
+[BETA,SIGMA,RESID]=mvregress(X,t_demand); 
+
+%3
+predicted = BETA(1)*ones(length(v_CDD),1) + BETA(2)*v_CDD + BETA(3)*v_HDD;
+
+scatter(predicted, v_demand) 
+
+%4
+k = predicted-v_demand;
+SSE = sum(k.^2);
+y_bar = mean(v_demand);
+j = (v_demand - y_bar);
+SST = sum(j.^2);
+r_squared = 1- (SSE/SST)
+
+%5
+residuals = predicted - v_demand;
+MSE = sum(residuals.^2)/length(v_demand)
+
+RMSE = sqrt(MSE);
+
+[r_squared RMSE^.5]
+
+figure; 
+scatter(v_demand, residuals)
+xlabel('Actual Dmeand (MWh)', 'FontSize', 14);
+ylabel('Residuals (MWh)', 'FontSize', 14);
