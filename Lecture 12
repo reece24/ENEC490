@@ -1,0 +1,51 @@
+
+%Lecture12
+
+data=xlsread('peak_forecasting.xlsx','RegressionData');
+insample = data(1:9,:);
+outsample = data(10:end,:);
+
+Y = insample(:,2);
+X = [ones(length(Y),1) insample(:,3:end)];
+coeff = mvregress(X,Y);
+
+
+% predicted
+predicted = coeff(1) + coeff(2)*outsample(:,3) + coeff(3)*outsample(:,4) + coeff(4)*outsample(:,5) + coeff(5)*outsample(:,6);
+
+% actual
+actual = outsample(:,2);
+
+% scatterplot
+scatter(actual,predicted)
+
+% RMSE
+sq_errors = (predicted - actual).^2;  % Squared Errors
+RMSE = sqrt(mean((sq_errors)));   % Root Mean Squared Error
+
+%Historical Temp
+data = xlsread('peak_forecasting.xlsx', 'HistoricalTemps');
+temp_data = data(:, 2);
+years = floor(length(data)/365);
+annual_peak = zeros(years, 1);
+
+%hottest temp of each year
+for i = 1:years
+    annual = temp_data((i-1)*365+1:(i-1)*365+365);
+    annual_peak(i) = max(annual);
+end 
+
+mean_peak = mean(annual_peak);
+stdv_peak = std(annual_peak); 
+MC = mean_peak + stdv_peak*randn(1000, 1);
+
+MC_simulation = coeff(1) + coeff(2)*1.8 + coeff(3)*5.3181 + coeff(4)*0.87 + coeff(5)*MC;
+
+%Reserve Margin
+reserve = ((25000 - MC_simulation)/25000)*100;
+
+histogram(reserve)
+xlabel('Reserve Margin (%)')
+ylabel('Frequency (/1000)')
+
+percent_less_fifteen = length(find(reserve<15))/length(reserve)
