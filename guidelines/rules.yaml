@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "title": "Exposome CV Modifier Guidance Rules",
+    "version": "0.1",
+    "scope": "Counseling modifiers only; not diagnosis or medication dosing."
+  },
+  "rules": [
+    {
+      "id": "aqi_moderate_activity_timing",
+      "exposure": "aqi",
+      "bands": ["Moderate", "USG"],
+      "caution": "standard",
+      "action": "Prefer lower-intensity outdoor activity and schedule exertion when AQI is lowest; consider indoor options.",
+      "evidence_strength": "Guideline/Agency guidance",
+      "citations": [
+        {
+          "title": "Air Quality Guide for Particle Pollution",
+          "org": "EPA",
+          "year": 2023,
+          "url": "https://www.epa.gov/airnow/air-quality-guide-particle-pollution"
+        },
+        {
+          "title": "Air Pollution and Cardiovascular Disease",
+          "org": "American Heart Association Scientific Statement",
+          "year": 2020,
+          "url": "https://www.ahajournals.org/doi/10.1161/CIR.0000000000000860"
+        }
+      ]
+    },
+    {
+      "id": "aqi_unhealthy_reduce_exposure",
+      "exposure": "aqi",
+      "bands": ["Unhealthy", "Very Unhealthy", "Hazardous"],
+      "caution": "standard",
+      "action": "Avoid vigorous outdoor activity; reduce time near traffic/smoke, use indoor HEPA filtration, and consider a well-fitted mask during smoke events.",
+      "evidence_strength": "Scientific Statement + Agency guidance",
+      "citations": [
+        {
+          "title": "Wildfire Smoke and Your Patients' Health",
+          "org": "EPA/CDC",
+          "year": 2024,
+          "url": "https://www.airnow.gov/wildfire-guide-posts/"
+        },
+        {
+          "title": "Air Pollution and Cardiovascular Disease",
+          "org": "American Heart Association Scientific Statement",
+          "year": 2020,
+          "url": "https://www.ahajournals.org/doi/10.1161/CIR.0000000000000860"
+        }
+      ]
+    },
+    {
+      "id": "pollen_high_mitigation",
+      "exposure": "pollen",
+      "bands": ["High", "Very High"],
+      "caution": "standard",
+      "action": "Limit outdoor exposure during peak pollen hours, keep windows closed, and shower/change clothes after outdoor activity.",
+      "evidence_strength": "Consensus/Agency guidance",
+      "citations": [
+        {
+          "title": "Pollen and Health",
+          "org": "CDC",
+          "year": 2024,
+          "url": "https://www.cdc.gov/climateandhealth/effects/allergen.htm"
+        }
+      ]
+    },
+    {
+      "id": "heat_high_exertion",
+      "exposure": "heat",
+      "bands": ["High", "Very High", "Extreme"],
+      "caution": "standard",
+      "action": "Reduce or reschedule vigorous exertion, hydrate, seek cooling breaks, and use buddy monitoring for heat illness symptoms.",
+      "evidence_strength": "Occupational guidance",
+      "citations": [
+        {
+          "title": "Criteria for a Recommended Standard: Occupational Exposure to Heat and Hot Environments",
+          "org": "NIOSH",
+          "year": 2016,
+          "url": "https://www.cdc.gov/niosh/docs/2016-106/default.html"
+        },
+        {
+          "title": "Heat & Health Tracker",
+          "org": "CDC",
+          "year": 2024,
+          "url": "https://ephtracking.cdc.gov/Applications/heatTracker/"
+        }
+      ]
+    },
+    {
+      "id": "high_risk_extra_caution",
+      "exposure": "aqi",
+      "bands": ["USG", "Unhealthy", "Very Unhealthy", "Hazardous"],
+      "caution": "elevated_only",
+      "action": "Because of high-risk cardiopulmonary context, use stricter exposure reduction language and lower threshold for clinician follow-up if symptoms worsen.",
+      "evidence_strength": "Scientific Statement/Consensus",
+      "citations": [
+        {
+          "title": "2019 ACC/AHA Guideline on the Primary Prevention of Cardiovascular Disease",
+          "org": "ACC/AHA",
+          "year": 2019,
+          "url": "https://www.ahajournals.org/doi/10.1161/CIR.0000000000000678"
+        },
+        {
+          "title": "Air Pollution and Cardiovascular Disease",
+          "org": "American Heart Association Scientific Statement",
+          "year": 2020,
+          "url": "https://www.ahajournals.org/doi/10.1161/CIR.0000000000000860"
+        }
+      ]
+    }
+  ]
+}
